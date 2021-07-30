@@ -7,7 +7,7 @@ while (num > 0) {
   total *= remainder;
   num = (num - remainder) / 10;
 }
-console.log('Сумма цифр числа 266219:', total);
+console.log('Произведение цифр числа 266219:', total);
 
 console.log(total, 'в третьей степени:', total ** 3);
 
