@@ -1,3 +1,5 @@
+'use strict';
+
 // Урок 2
 let num = 266219;
 let total = 1;
@@ -48,3 +50,22 @@ let namePerson = prompt('Введите имя: ');
 let result = (namePerson === 'Артем') ? 'Директор' : (namePerson === 'Максим') ? 'Преподаватель' : 'Студент';
 
 console.log('Привет, ', result);
+
+
+// Урок 4
+const shortenArticle = function(string) {
+  if (typeof(string) === "string") {
+    string = string.trim();
+    if (string.length > 30) {
+      string = string.substr(0, 30) + '...';
+    }
+    return string;
+  } else {
+    return 'Входные данные не являются строкой';
+  }
+};
+
+console.log( shortenArticle(6) );
+console.log( shortenArticle('Это обычная строка') );
+console.log( shortenArticle('        Это строка с пробелами        ') );
+console.log( shortenArticle('    Это строка длиннее 30 символов, с двумя табами в начале') );
