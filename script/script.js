@@ -1,11 +1,11 @@
 'use strict';
 
-let DomElement = function(selector, height, width, bg, fontSize) {
+let DomElement = function(selector, height, width, bg, position) {
   this.selector = selector;
   this.height = height + 'px';
   this.width = width + 'px';
   this.bg = bg;
-  this.fontSize = fontSize + 'px';
+  this.position = position;
 };
 
 DomElement.prototype.createElem = function() {
@@ -14,7 +14,7 @@ DomElement.prototype.createElem = function() {
 
     elem = document.createElement('div');
     elem.classList.add(`${this.selector.slice(1)}`);
-    elem.textContent = 'Заголовок с классом';
+    elem.textContent = 'Двигайте квадрат стрелками на клавиатуре';
 
   } else if (this.selector[0] === '#') {
 
@@ -23,16 +23,36 @@ DomElement.prototype.createElem = function() {
     elem.textContent = 'Параграф с id';
   }
 
-  elem.style.height = this.height;
-  elem.style.width = this.width;
-  elem.style.background = this.bg;
-  elem.style.fontSize = this.fontSize;
+  elem.style.cssText = `
+    height: ${this.height};
+    width: ${this.width};
+    background: ${this.bg};
+    font-size: ${this.fontSize};
+    text-align: center;
+    position: absolute;
+    top: 200px;
+    left: 200px;
+  `;
 
   document.body.append(elem);
+
+  document.addEventListener("keydown", function(event) {
+
+      if (event.key === 'ArrowUp') {
+        elem.style.top = elem.style.top.slice(0, -2) - 10 + 'px';
+      } else if (event.key === 'ArrowLeft') {
+        elem.style.left = elem.style.left.slice(0, -2) - 10 + 'px';
+      } else if (event.key === 'ArrowRight') {
+        elem.style.left = +elem.style.left.slice(0, -2) + 10 + 'px';
+      } else if (event.key === 'ArrowDown') {
+        elem.style.top = +elem.style.top.slice(0, -2) + 10 + 'px';
+      }
+  });
+
 };
 
-let domElementDiv = new DomElement('.container', 400, 500, 'green', 24);
-domElementDiv.createElem();
+let square = new DomElement('.square', 100, 100, '#5F9EA0', 'absolute');
 
-let domElementP = new DomElement('#paragraph', 30, 500, 'red', 16);
-domElementP.createElem();
+document.addEventListener("DOMContentLoaded", function() {
+  square.createElem();
+});
