@@ -23,10 +23,12 @@ DomElement.prototype.createElem = function() {
     elem.textContent = 'Параграф с id';
   }
 
-  elem.style.height = this.height;
-  elem.style.width = this.width;
-  elem.style.background = this.bg;
-  elem.style.fontSize = this.fontSize;
+  elem.style.cssText = `
+    height: ${this.height};
+    width: ${this.width};
+    background: ${this.bg};
+    font-size: ${this.fontSize};
+  `;
 
   document.body.append(elem);
 };
