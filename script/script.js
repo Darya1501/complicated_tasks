@@ -34,7 +34,7 @@ const wordForm = function(num) {
 const difference = Math.floor(((newYear.getTime() - now.getTime()) / 24 / 60 / 60 / 1000));
 
 const string =
-` <p>${getTimesOfDay(24)} <br>
+` <p>${getTimesOfDay(now)} <br>
 Сегодня: ${DayOfWeek[now.getDay()]} <br>
 Текущее время: ${now.toLocaleTimeString('en-US')} <br>
 До нового года осталось ${difference} ${wordForm(difference)}</p> `;
