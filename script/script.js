@@ -4,14 +4,14 @@ const newYear = new Date(2022, 0, 1);
 
 
 const getTimesOfDay = function(date) {
-  // const hour = date.getHours();
-  if (date < 4) {
+  const hour = date.getHours();
+  if (hour < 4) {
     return 'Доброй ночи!';
-  } else if (date < 12) {
+  } else if (hour < 12) {
     return 'Доброе утро!';
-  } else if (date < 17) {
+  } else if (hour < 17) {
     return 'Добрый день!';
-  } else if (date < 24) {
+  } else if (hour < 24) {
     return 'Добрый вечер!';
   } else {
     return 'Доброй ночи!';
