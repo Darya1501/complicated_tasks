@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+button {
+  padding: 15px 40px;
+  border: none;
+  color: #887070;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #bebaba;
+  box-shadow: 0 0  10px rgba(0, 0, 0, 0.3);
+}
+
+.start {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.reset {
+  position: relative;
+  top: 15px;
+  left: 15px;
+  z-index: 2;
+}
+
+.square,
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border: 1px solid black;
+  z-index: 1
+}
+
+.circle {
+  border-radius: 50%
+}
