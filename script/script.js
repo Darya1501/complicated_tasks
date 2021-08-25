@@ -21,7 +21,9 @@ const addToStorage = () => {
 
 const getName = () => {
   const fullName = prompt('Введите имя и фамилию через пробел:');
-  if (fullName.length === 0 || fullName.split(' ').length !== 2) {
+  if (!fullName) {
+    return null;
+  } else if (fullName.length === 0 || fullName.split(' ').length !== 2) {
     alert('Неверный ввод. Попробуйте ещё раз');
     getName();
   } else {
@@ -31,7 +33,9 @@ const getName = () => {
 
 const getLogin = () => {
   const login = prompt('Введите логин (от 5 символов):');
-  if (login.length < 5) {
+  if (!login) {
+    return null;
+  } else if (login.length < 5) {
     alert('Логин должен быть длиннее 5 символов');
     getLogin();
   } else {
@@ -41,7 +45,9 @@ const getLogin = () => {
 
 const getPassword = user => {
   const password = prompt('Введите пароль (от 5 символов):');
-  if (password.length < 5) {
+  if (!password) {
+    return null;
+  } else if (password.length < 5) {
     alert('Пароль должен быть длиннее 5 символов');
     getPassword(user);
   } else {
@@ -84,14 +90,23 @@ const cangeUserName = name => {
 };
 
 const authorization = () => {
-  console.log('authorization');
-
-  let user = checkUser(getLogin());
+  let login = getLogin();
+  if (!login) {
+    return;
+  }
+  let user = checkUser(login);
   while (!user) {
     alert('Пользователя с таким логином нет в базе, повторите');
-    user = checkUser(getLogin());
+    login = getLogin();
+    if (!login) {
+      return;
+    }
+    user = checkUser(login);
   }
   let password = getPassword();
+  if (!password) {
+    return;
+  }
   while (user.password !== password) {
     alert('Неверный пароль');
     password = getPassword();
@@ -100,23 +115,31 @@ const authorization = () => {
 };
 
 const registration = () => {
-  console.log('registration');
-  const newUser = {};
-
   const fullName = getName();
-  newUser.name = fullName[0];
-  newUser.surname = fullName[1];
+  if (!fullName) {
+    return;
+  }
 
   let login = getLogin();
   while (checkUser(login)) {
     alert('Пользователь с таким логином уже существует, придумайте новый');
     login = getLogin();
   }
+  if (!login) {
+    return;
+  }
+
+  const password = getPassword();
+  if (!password) {
+    return;
+  }
+
+  const newUser = {};
+  newUser.name = fullName[0];
+  newUser.surname = fullName[1];
   newUser.login = login;
-
-  newUser.password = getPassword();
+  newUser.password = password;
   newUser.date = new Date().toLocaleString("ru", optionsOfDate);
-
   newUser.key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
   users.push(newUser);
