@@ -1,13 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script defer src="script/script.js"></script>
-</head>
-<body>
-  
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Converter</title>
+    <link rel="stylesheet" href="style/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Выберите валюту:</h2>
+      <div class="radio">
+        <div class="currency">
+          <input
+            type="radio"
+            id="USD"
+            name="currency"
+            value="Доллар США (USD)"
+            checked
+          />
+          <label for="USD">USD</label>
+        </div>
+
+        <div class="currency">
+          <input type="radio" id="EUR" name="currency" value="Евро (EUR)" />
+          <label for="EUR">EUR</label>
+        </div>
+      </div>
+
+      <div class="converter">
+        <label id="inputLabel" for="input">Доллар США (USD)</label>
+        <input type="text" id="input" />
+
+        <button id="change">
+          <img src="change.png" class="changeIMG" alt="" />
+        </button>
+
+        <label id="outputLabel" for="output">Российский рубль (RUB)</label>
+        <input type="text" id="output" disabled />
+
+        <button class="button" id="button">Конвертировать</button>
+        <button class="button" id="reset">Сбросить</button>
+      </div>
+    </div>
+
+    <script src="script/script.js"></script>
+  </body>
 </html>

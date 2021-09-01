@@ -1,0 +1,59 @@
+* {
+  font-family: sans-serif;
+}
+
+.container {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+}
+
+.radio {
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.currency {
+  margin-right: 20px;
+  border-radius: 5px;
+  border: 2px solid lightgrey;
+  padding: 10px 15px;
+}
+
+.currency > input[checked] {
+  background-color: #0069d9;
+  ;
+}
+
+.converter {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.converter > input {
+  margin-bottom: 25px;
+}
+
+.button {
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+#change {
+  background-color: #fff;
+  border: none;
+  width: 40px;
+  margin: auto;
+  margin-bottom: 25px;
+  cursor: pointer;
+}
+.changeIMG {
+  width: 20px;
+  height: 20px;
+}
