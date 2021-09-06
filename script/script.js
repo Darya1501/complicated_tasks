@@ -4,21 +4,21 @@ const preloader = document.getElementById("preload"),
     cardBlock = document.querySelector(".main-container");
 
 // // Функция исчезновения прелоадера
-// const animate = elem => {
-//     elem.style.opacity = 1;
-//     const interval = setInterval(() => {
-//         elem.style.opacity -= 0.01;
-//         if (elem.style.opacity <= 0.01) {
-//             clearInterval(interval);
-//             preloader.style.display = "none";
-//         }
-//     }, 15);
-// };
-// window.onload = () => {
-//     setTimeout(() => {
-//         animate(preloader);
-//     }, 500);
-// };
+const animate = elem => {
+    elem.style.opacity = 1;
+    const interval = setInterval(() => {
+        elem.style.opacity -= 0.01;
+        if (elem.style.opacity <= 0.01) {
+            clearInterval(interval);
+            preloader.style.display = "none";
+        }
+    }, 15);
+};
+window.onload = () => {
+    setTimeout(() => {
+        animate(preloader);
+    }, 500);
+};
 
 // Вывод карточек на страницу
 const fillCards = data => {
