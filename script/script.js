@@ -112,6 +112,7 @@ function debounce(f, t) {
 const filterCharacter = () => {
     const string = search.value;
     const cards = document.querySelectorAll(".card");
+    const error = document.querySelector('.searchError');
     let countHideCard = 0; // Счетчик скрытых карточек
 
     cards.forEach(card => {
@@ -124,10 +125,12 @@ const filterCharacter = () => {
         if (name.indexOf(string.toUpperCase()) === -1) {
             card.classList.add("hidden");
             countHideCard += 1;
+        } else if (error) {
+            error.remove();
         }
     });
 
-    if (countHideCard === 50 && !document.querySelector('.searchError')) { // Если скрыты все карточки
+    if (countHideCard === 50 && !error) { // Если скрыты все карточки
         cardBlock.insertAdjacentHTML("beforeend",
             `<div class="searchError">
                 <p> Нет карточек, соответствующих поисковому запросу </p>
