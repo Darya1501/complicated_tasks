@@ -59,7 +59,7 @@ const fillFilter = films => {
 
 // Получение информации из базы данных
 const getAllInfo = () => {
-    fetch("../dbHeroes.json")
+    fetch("./dbHeroes.json")
         .then(response => {
             if (response.status !== 200) throw new Error("Status network not 200");
             return response.json();
