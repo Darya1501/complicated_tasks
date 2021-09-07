@@ -134,7 +134,7 @@ const filterCharacter = () => {
         cardBlock.insertAdjacentHTML("beforeend",
             `<div class="searchError">
                 <p> Нет карточек, соответствующих поисковому запросу </p>
-                <img class="error-img" src="../img/404.jpg">
+                <img class="error-img" src="./img/404.jpg">
             </div>`);
     }
 };
