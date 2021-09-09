@@ -93,13 +93,13 @@ const replaceList = data => {
     name.addEventListener('click', event => {
       const parent = event.target.closest('.dropdown-lists__list');
       if (parent.classList.contains('dropdown-lists__list--default')) {
-        getLinks(data);
         selectList.innerHTML = '';
         parent.style.display = 'none';
         data.forEach(country => {
           if (country['country'] === name.dataset.country) fillSelectList(country);
         });
         selectList.style.display = 'block';
+        getLinks(data);
         replaceList(data);
       } else if (parent.classList.contains('dropdown-lists__list--select')) {
         selectList.style.display = 'none';
