@@ -5,9 +5,33 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <script defer src="script/script.js"></script>
+  <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-  
+  <div class="paint">
+    <div class="control-panel">
+      <label for="color">Выберите цвет:</label>
+      <input type="color" id="color" name="color">
+      <label for="select">Выберите толщину линии:</label>
+      <select name="select" id="width">
+        <option value="1" selected>1px</option>
+        <option value="2">2px</option>
+        <option value="3">3px</option>
+        <option value="4">4px</option>
+        <option value="5">5px</option>
+        <option value="6">6px</option>
+        <option value="7">7px</option>
+        <option value="8">8px</option>
+        <option value="9">9px</option>
+        <option value="10">10px</option>
+      </select>
+    </div>
+    <canvas id="paint" width="500", height="500"></canvas>
+  </div>
+
+  <canvas id="rings" width="360" height="170"></canvas>
+
+  <script src="script/rings.js"></script>
+  <script src="script/paint.js"></script>
 </body>
 </html>

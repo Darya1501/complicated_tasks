@@ -1,0 +1,16 @@
+canvas {
+  border: 1px solid gray;
+}
+
+.paint {
+  float: left;
+  margin-right: 30px;
+}
+
+.control-panel {
+  margin-bottom: 10px;
+}
+
+#rings {
+  margin-top: 38px;
+}
