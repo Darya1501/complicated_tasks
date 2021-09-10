@@ -19,7 +19,7 @@ const animatePreloader = elem => {
   }, 15);
 };
 
-const getAllInfo = () => {
+const getAllInfo = locale => {
   fetch("./db_cities.json")
     .then(response => {
       if (response.status !== 200) throw new Error("Status network not 200");
@@ -27,12 +27,38 @@ const getAllInfo = () => {
       return response.json();
     })
     .then(data => {
-      countries = data['RU'];
+      let firstCountry = '';
+      if (locale === 'RU') firstCountry = 'Россия';
+      if (locale === 'EN') firstCountry = 'United Kingdom';
+      if (locale === 'DE') firstCountry = 'Deutschland';
+
+      data[locale].forEach(country => {
+        if (country['country'] === firstCountry) {
+          countries.push(country);
+          data[locale].splice(data[locale].indexOf(country), 1);
+        }
+      });
+      countries.push(...data[locale]);
+      localStorage.setItem('localeCountries', JSON.stringify(countries));
       return data;
     })
     .catch(error => console.error(error));
 };
-getAllInfo();
+
+if (document.cookie.indexOf('locale') === -1) {
+  let locale = prompt('Введите язык (ru, en, de)', 'RU').toUpperCase();
+  while (locale !== 'RU' && locale !== 'EN' && locale !== 'DE') {
+    locale = prompt('Введите одно из значений: RU, EN или DE', 'RU').toUpperCase();
+  }
+  document.cookie = `locale=${locale}; expires=20/09/2021 00:00:00`;
+  preloader.style.display = "none";
+  getAllInfo(locale);
+} else {
+  const cookie = document.cookie;
+  const indexOfLocale = cookie.indexOf('=', cookie.indexOf('locale')) + 1;
+  const locale = cookie.slice(indexOfLocale, indexOfLocale + 2);
+  countries = JSON.parse(localStorage.getItem('localeCountries'));
+}
 
 
 
@@ -233,3 +259,5 @@ input.addEventListener('click', () => {
   }
   defaultList.style.display = 'block';
 });
+
+
