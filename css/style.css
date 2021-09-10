@@ -6,6 +6,25 @@
   list-style-type: none;
 }
 
+#preload {
+  display: block;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #00416A url(../preloadRings.svg) center center no-repeat;
+  background-size: 150px;
+}
+#preload > p {
+  color: #fff;
+  position: fixed;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
 input:focus {
   outline: none;
 }

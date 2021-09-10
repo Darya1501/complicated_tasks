@@ -1,36 +1,60 @@
-const input = document.getElementById('select-cities'),
+const preloader = document.getElementById("preload"),
+  input = document.getElementById('select-cities'),
   defaultList = document.querySelector('.dropdown-lists__list--default'),
   selectList = document.querySelector('.dropdown-lists__list--select'),
   autocompleteList = document.querySelector('.dropdown-lists__list--autocomplete'),
   button = document.querySelector('.button');
 
+let countries = [];
 button.style.pointerEvents = 'none';
 
-const getCitiesHTML = cities => {
-  cities.sort((a, b) => b.count - a.count);
-  let citiesHTML = '';
-  for (let i = 0; i < 3; i++) {
-    citiesHTML += `
-      <div class="dropdown-lists__line">
-        <div class="dropdown-lists__city">${cities[i].name}</div>
-        <div class="dropdown-lists__count">${cities[i].count}</div>
-      </div>
-      `;
-  }
-  return citiesHTML;
+const animatePreloader = elem => {
+  elem.style.opacity = 1;
+  const interval = setInterval(() => {
+    elem.style.opacity -= 0.01;
+    if (elem.style.opacity <= 0.01) {
+      clearInterval(interval);
+      preloader.style.display = "none";
+    }
+  }, 15);
 };
 
-const fillDefaultList = countries => {
+const getAllInfo = () => {
+  fetch("./db_cities.json")
+    .then(response => {
+      if (response.status !== 200) throw new Error("Status network not 200");
+      animatePreloader(preloader);
+      return response.json();
+    })
+    .then(data => {
+      countries = data['RU'];
+      return data;
+    })
+    .catch(error => console.error(error));
+};
+getAllInfo();
+
+
+
+const fillDefaultList = () => {
   let listHTML = '<div class="dropdown-lists__col">';
   countries.forEach(country => {
+    country['cities'].sort((a, b) => b.count - a.count);
     listHTML += `
       <div class="dropdown-lists__countryBlock">
         <div class="dropdown-lists__total-line" data-country="${country['country']}">
           <div class="dropdown-lists__country">${country['country']}</div>
           <div class="dropdown-lists__count">${country['count']}</div>
         </div>
-        ${getCitiesHTML(country['cities'])}
       `;
+    for (let i = 0; i < 3; i++) {
+      listHTML += `
+        <div class="dropdown-lists__line">
+          <div class="dropdown-lists__city">${country['cities'][i].name}</div>
+          <div class="dropdown-lists__count">${country['cities'][i].count}</div>
+        </div>
+      `;
+    }
   });
   listHTML += '</div></div>';
   defaultList.insertAdjacentHTML("beforeend", listHTML);
@@ -91,24 +115,54 @@ const fillSelectList = country => {
   selectList.insertAdjacentHTML("beforeend", listHTML);
 };
 
+const animateLeft = () => {
+  let counter = 0;
+  selectList.style.display = 'block';
+  selectList.style.transform = 'translateX(200px)';
+  const interval = setInterval(() => {
+    counter += 10;
+    defaultList.style.transform = `translateX(-${counter}px)`;
+    selectList.style.transform = `translateX(${400 - counter}px)`;
+    if (counter === 400) {
+      clearInterval(interval);
+      defaultList.style.display = 'none';
+    }
+  }, 10);
+};
+
+const animateRight = () => {
+  let counter = 0;
+  defaultList.style.display = 'block';
+  defaultList.style.transform = 'translateX(-400px)';
+  const interval = setInterval(() => {
+    counter += 10;
+    selectList.style.transform = `translateX(${counter}px)`;
+    defaultList.style.transform = `translateX(-${400 - counter}px)`;
+    if (counter === 400) {
+      clearInterval(interval);
+      selectList.style.display = 'none';
+    }
+  }, 10);
+};
+
 const replaceList = data => {
+  const wrapper = document.querySelector('.dropdown');
+  wrapper.style.overflowX = 'hidden';
   const countriesNames = document.querySelectorAll('.dropdown-lists__total-line');
   countriesNames.forEach(name => {
     name.addEventListener('click', event => {
       const parent = event.target.closest('.dropdown-lists__list');
       if (parent.classList.contains('dropdown-lists__list--default')) {
         selectList.innerHTML = '';
-        parent.style.display = 'none';
         data.forEach(country => {
           if (country['country'] === name.dataset.country) fillSelectList(country);
         });
-        selectList.style.display = 'block';
+        animateLeft();
         getLinks(data);
         replaceList(data);
       } else if (parent.classList.contains('dropdown-lists__list--select')) {
-        selectList.style.display = 'none';
         selectList.innerHTML = '';
-        defaultList.style.display = 'block';
+        animateRight();
       }
     });
   });
@@ -146,14 +200,20 @@ const autocompleteListHandler = data => {
       autocompleteList.style.display = 'none';
       counterOfKeyDown = 0;
     }
-    cities.forEach(item => {
-      const substring = item.textContent.toUpperCase().indexOf(input.value.toUpperCase());
-      if (substring === -1) {
-        item.classList.add('displayNone');
-      } else {
-        item.classList.remove('displayNone');
-      }
-    });
+
+    if (input.value !== '') {
+      cities.forEach(item => {
+        item.innerHTML = item.innerHTML.replace(/<\/?b>/, '');
+        const substringIndex = item.textContent.toUpperCase().indexOf(input.value.toUpperCase());
+        if (substringIndex === -1) {
+          item.classList.add('displayNone');
+        } else {
+          const substring = item.textContent.slice(substringIndex, substringIndex + input.value.length);
+          item.innerHTML = item.innerHTML.replace(substring, `<b>${substring}</b>`);
+          item.classList.remove('displayNone');
+        }
+      });
+    }
 
     if (autocompleteList.querySelectorAll('.displayNone').length === cities.length) {
       autocompleteList.querySelector('.nothing-found').style.display = '';
@@ -163,37 +223,13 @@ const autocompleteListHandler = data => {
   });
 };
 
-const getAllInfo = () => {
-  fetch("./db_cities.json")
-    .then(response => {
-      if (response.status !== 200) throw new Error("Status network not 200");
-      return response.json();
-    })
-    .then(data => {
-      fillDefaultList(data['RU']);
-      defaultList.style.display = 'block';
-      return data;
-    })
-    .then(data => {
-      replaceList(data['RU']);
-      return data;
-    })
-    .then(data => {
-      autocompleteListHandler(data['RU']);
-      return data;
-    })
-    .then(data => {
-      getLinks(data['RU']);
-      return data;
-    })
-    .catch(error => console.error(error));
-};
-
 input.addEventListener('click', () => {
   const defaultList = document.querySelector('.dropdown-lists__list--default');
-  if (defaultList.querySelector('.dropdown-lists__col')) {
-    defaultList.style.display = 'block';
-  } else {
-    getAllInfo();
+  if (!defaultList.querySelector('.dropdown-lists__col')) {
+    fillDefaultList(countries);
+    replaceList(countries);
+    autocompleteListHandler(countries);
+    getLinks(countries);
   }
+  defaultList.style.display = 'block';
 });
