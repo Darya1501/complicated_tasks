@@ -1,9 +1,10 @@
 const input = document.getElementById('select-cities'),
   defaultList = document.querySelector('.dropdown-lists__list--default'),
   selectList = document.querySelector('.dropdown-lists__list--select'),
-  autocompleteList = document.querySelector('.dropdown-lists__list--autocomplete');
+  autocompleteList = document.querySelector('.dropdown-lists__list--autocomplete'),
+  button = document.querySelector('.button');
 
-
+button.style.pointerEvents = 'none';
 
 const getCitiesHTML = cities => {
   cities.sort((a, b) => b.count - a.count);
@@ -39,7 +40,6 @@ const fillDefaultList = countries => {
 const getLinks = countries => {
   const cities = document.querySelectorAll('.dropdown-lists__line');
   const closeBTN = document.querySelector('.close-button');
-  const button = document.querySelector('.button');
   const lists = document.querySelector('.dropdown-lists');
   const label = document.querySelector('.label');
 
@@ -47,6 +47,7 @@ const getLinks = countries => {
     city.addEventListener('click', () => {
       input.value = city.querySelector('.dropdown-lists__city').textContent;
       closeBTN.style.display = 'block';
+      button.style.pointerEvents = 'auto';
       countries.forEach(country => {
         country.cities.forEach(city => {
           if (city.name === input.value) button.setAttribute('href', city.link);
@@ -61,6 +62,7 @@ const getLinks = countries => {
     input.value = '';
     label.style.display = '';
     button.setAttribute('href', '#');
+    button.style.pointerEvents = 'none';
     closeBTN.style.display = 'none';
   });
 };
