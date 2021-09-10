@@ -4,34 +4,6 @@ const input = document.getElementById('select-cities'),
   autocompleteList = document.querySelector('.dropdown-lists__list--autocomplete');
 
 
-const getLinks = countries => {
-  const cities = document.querySelectorAll('.dropdown-lists__line');
-  const closeBTN = document.querySelector('.close-button');
-  const button = document.querySelector('.button');
-  const lists = document.querySelector('.dropdown-lists');
-  const label = document.querySelector('.label');
-
-  cities.forEach(city => {
-    city.addEventListener('click', () => {
-      input.value = city.querySelector('.dropdown-lists__city').textContent;
-      closeBTN.style.display = 'block';
-      countries.forEach(country => {
-        country.cities.forEach(city => {
-          if (city.name === input.value) button.setAttribute('href', city.link);
-        });
-      });
-      lists.innerHTML = `<div class="dropdown-lists__list dropdown-lists__list--default"></div>`;
-      label.style.display = 'none';
-    });
-  });
-
-  closeBTN.addEventListener('click', () => {
-    input.value = '';
-    label.style.display = '';
-    button.setAttribute('href', '#');
-    closeBTN.style.display = 'none';
-  });
-};
 
 const getCitiesHTML = cities => {
   cities.sort((a, b) => b.count - a.count);
@@ -60,9 +32,39 @@ const fillDefaultList = countries => {
       `;
   });
   listHTML += '</div></div>';
-
   defaultList.insertAdjacentHTML("beforeend", listHTML);
 };
+
+
+const getLinks = countries => {
+  const cities = document.querySelectorAll('.dropdown-lists__line');
+  const closeBTN = document.querySelector('.close-button');
+  const button = document.querySelector('.button');
+  const lists = document.querySelector('.dropdown-lists');
+  const label = document.querySelector('.label');
+
+  cities.forEach(city => {
+    city.addEventListener('click', () => {
+      input.value = city.querySelector('.dropdown-lists__city').textContent;
+      closeBTN.style.display = 'block';
+      countries.forEach(country => {
+        country.cities.forEach(city => {
+          if (city.name === input.value) button.setAttribute('href', city.link);
+        });
+      });
+      Array.from(lists.children).forEach(list => list.style.display = 'none');
+      label.style.display = 'none';
+    });
+  });
+
+  closeBTN.addEventListener('click', () => {
+    input.value = '';
+    label.style.display = '';
+    button.setAttribute('href', '#');
+    closeBTN.style.display = 'none';
+  });
+};
+
 
 const fillSelectList = country => {
   let listHTML = `
@@ -128,11 +130,11 @@ const fillAutocompleteList = countries => {
 
 const autocompleteListHandler = data => {
   fillAutocompleteList(data);
-  getLinks(data);
   let counterOfKeyDown = 0;
   const cities = autocompleteList.querySelectorAll('.dropdown-lists__line');
 
   input.addEventListener('keyup', () => {
+    getLinks(data);
     if (counterOfKeyDown === 0) {
       defaultList.style.display = 'none';
       autocompleteList.style.display = 'block';
@@ -157,18 +159,9 @@ const autocompleteListHandler = data => {
       autocompleteList.querySelector('.nothing-found').style.display = 'none';
     }
   });
-
-  input.addEventListener('blur', () => {
-    autocompleteList.style.display = 'none';
-    input.value = '';
-    counterOfKeyDown = 0;
-  });
 };
 
 const getAllInfo = () => {
-  const defaultList = document.querySelector('.dropdown-lists__list--default');
-  if (defaultList.querySelector('.dropdown-lists__col')) return;
-
   fetch("./db_cities.json")
     .then(response => {
       if (response.status !== 200) throw new Error("Status network not 200");
@@ -195,5 +188,10 @@ const getAllInfo = () => {
 };
 
 input.addEventListener('click', () => {
-  getAllInfo();
+  const defaultList = document.querySelector('.dropdown-lists__list--default');
+  if (defaultList.querySelector('.dropdown-lists__col')) {
+    defaultList.style.display = 'block';
+  } else {
+    getAllInfo();
+  }
 });
